@@ -1,0 +1,35 @@
+apply plugin: 'java'
+
+// Ensure compatibility with OS X 10.4 (PPC Macs)
+sourceCompatibility = '1.5'
+targetCompatibility = '1.5'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'net.sf.jopt-simple',
+    name: 'jopt-simple',
+    version: '4.4'
+}
+
+sourceSets {
+    main { java { srcDir 'src' } }
+}
+
+jar {
+    from(configurations.compile.collect { it.isDirectory() ? it : zipTree(it) })
+
+    manifest {
+        attributes(
+            "Main-Class": "oldmacarch.OldMacArchiver",
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Implementation-Vendor": "Iliyas Jorio",
+            "Built-JDK": System.getProperty('java.version'),
+            "Built-Date": new Date(),
+        )
+    }
+}
+
